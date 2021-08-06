@@ -17,7 +17,9 @@ namespace GridSystem.Scripts
         public enum GridType
         {
             Empty,
-            Full
+            Full,
+            Enemy,
+            Increase
         }
 
     }

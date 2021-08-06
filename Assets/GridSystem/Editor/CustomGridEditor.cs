@@ -103,7 +103,9 @@ namespace GridSystem.Editor
                     }
                     GUILayout.BeginHorizontal();
                     GUILayout.FlexibleSpace();
+                    
                     GUILayout.Label($"{i}x{j} Node", textStyle);
+                    
                     GUILayout.FlexibleSpace();
                     GUILayout.EndHorizontal();
                     
@@ -112,6 +114,7 @@ namespace GridSystem.Editor
                     
                     GUILayout.BeginHorizontal();
                     GUILayout.FlexibleSpace();
+                    
                     if (myScript.GridNodeList[index].gridType == GridNodeValue.GridType.Full)
                     {
                         textStyle.normal.textColor = Color.gray;
@@ -120,30 +123,20 @@ namespace GridSystem.Editor
                     {
                         textStyle.normal.textColor = Color.white;
                     }
+                    
                     GUILayout.Label($"L: {myScript.GridNodeList[index].leftEmptyCount} " +
                                     $"R: {myScript.GridNodeList[index].rightEmptyCount} {Environment.NewLine}" +
                                     $"U: {myScript.GridNodeList[index].upEmptyCount} " +
                                     $"D: {myScript.GridNodeList[index].downEmptyCount}", textStyle);
+                    
                     GUILayout.FlexibleSpace();
                     GUILayout.EndHorizontal();
 
-                    // if (myScript.GridNodeList[index].gridType == GridNodeValue.GridType.Full)
-                    // {
-                    //     Handles.color = Color.red;
-                    //     Handles.DrawWireDisc(startPoint, Vector3.back, myScript.GridNodeSize);
-                    // }
-                    // else
-                    // {
-                    //     Handles.color = Color.green;
-                    //     Handles.DrawSolidDisc(startPoint, Vector3.back, myScript.GridNodeSize);
-                    // }
-                    
                     GUILayout.BeginHorizontal();
                     GUILayout.FlexibleSpace();
                     myScript.GridNodeList[index].name = $"{i}x{j}";
                     myScript.GridNodeList[index].row = i;
                     myScript.GridNodeList[index].column = j;
-
                     GUILayout.FlexibleSpace();
                     GUILayout.EndHorizontal();
                     
