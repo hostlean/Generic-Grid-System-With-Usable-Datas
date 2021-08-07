@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GridSystem.Scripts
@@ -7,8 +8,7 @@ namespace GridSystem.Scripts
     public class CellWithMoveValues
     {
         [HideInInspector] public string name;
-       
-        
+
         public int row, column;
         public CellType cellType;
         public UpgradeType upgradeType;
@@ -18,8 +18,8 @@ namespace GridSystem.Scripts
         public int rightEmptyCount;
         public int upEmptyCount;
         public int downEmptyCount;
-      
-    
+
+
         public enum CellType
         {
             Empty,
@@ -34,6 +34,5 @@ namespace GridSystem.Scripts
             Additive,
             Multiple
         }
-
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GridSystem.Scripts
 {
@@ -51,8 +49,7 @@ namespace GridSystem.Scripts
 
         public void SetCellValue(Vector3 worldPosition, TGridCell value)
         {
-            int x, y;
-            GetGridCellPosition(worldPosition, out x, out y);
+            GetGridCellPosition(worldPosition, out var x, out var y);
             
             SetCellValue(x, y, value);
         }
@@ -67,8 +64,7 @@ namespace GridSystem.Scripts
 
         public TGridCell GetValue(Vector3 worldPosition)
         {
-            int x, y;
-            GetGridCellPosition(worldPosition, out x, out y);
+            GetGridCellPosition(worldPosition, out var x, out var y);
             
             return GetValue(x, y);
         }

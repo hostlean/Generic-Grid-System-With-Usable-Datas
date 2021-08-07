@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Eventing.Reader;
+using System.Linq;
 using GridSystem.ScriptableObjects;
 using GridSystem.Scripts;
 using UnityEditor;
@@ -40,6 +41,15 @@ namespace GridSystem.Editor
                 
                 if (GUILayout.Button("Save Values To ScriptableObject"))
                 {
+                    bool hasStartPoint =
+                        myScript.GridNodeList.Any(n => 
+                            n.cellType == CellWithMoveValues.CellType.StartPoint);
+                    if (!hasStartPoint)
+                    {
+                        throw new ArgumentNullException(
+                            $"{CellWithMoveValues.CellType.StartPoint}",
+                            "You didn't choose a start point");
+                    }
                     CreateAndSaveScriptableObject();
                 }
             }
