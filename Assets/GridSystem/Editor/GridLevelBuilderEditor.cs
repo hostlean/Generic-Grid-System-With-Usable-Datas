@@ -7,16 +7,16 @@ using UnityEngine;
 
 namespace GridSystem.Editor
 {
-    [CustomEditor(typeof(CustomGrid))]
-    public class CustomGridEditor : UnityEditor.Editor
+    [CustomEditor(typeof(GridLevelBuilder))]
+    public class GridLevelBuilderEditor : UnityEditor.Editor
     {
-        private CustomGrid myScript;
+        private GridLevelBuilder myScript;
         private SerializedProperty gridType;
         private bool gridIndexEmptyValuesCalculated;
         private GUIStyle textStyle = new GUIStyle();
         private void OnEnable()
         {
-            myScript = (CustomGrid)target;
+            myScript = (GridLevelBuilder)target;
             
         }
 
@@ -49,37 +49,41 @@ namespace GridSystem.Editor
 
         private void CreateAndSaveScriptableObject()
         {
-            GridData asset = ScriptableObject.CreateInstance<GridData>();
+            GridWithMoveValuesData asset = CreateInstance<GridWithMoveValuesData>();
 
-            AssetDatabase.CreateAsset(asset, "Assets/GridSystem/GridDatas/GridData.asset");
+            AssetDatabase.CreateAsset(asset, "Assets/GridSystem/GridDatas/GridWithMoveValuesData.asset");
             AssetDatabase.SaveAssets();
 
+            asset.row = myScript.RowCount;
+            asset.column = myScript.ColumnCount;
+            asset.startPosition = myScript.StartPosition;
+            asset.gridCellSize = myScript.GridCellSize;
             asset.gridNodeValues = myScript.GridNodeList;
     
             EditorUtility.FocusProjectWindow();
 
             Selection.activeObject = asset;
         }
-        
+
 
         private void OnSceneGUI()
         {
             DrawGridLines();
            
+            Handles.BeginGUI();
         
             GameObject go = Selection.activeObject as GameObject;
-
 
             for (int i = 0; i < myScript.RowCount; i++)
             {
                 for (int j = 0; j < myScript.ColumnCount; j++)
                 {
                     if(myScript.GridNodeList.Count < myScript.RowCount * myScript.ColumnCount)
-                        myScript.GridNodeList.Add(new GridNodeValue());
+                        myScript.GridNodeList.Add(new CellWithMoveValues());
                     
                    
-                    var startPoint = new Vector3(i, j, 0) * myScript.GridNodeSize + myScript.StartPoint;
-                    startPoint += new Vector3(0, myScript.GridNodeSize, 0);
+                    var startPoint = new Vector3(i, j, 0) * myScript.GridCellSize + myScript.StartPosition;
+                    startPoint += new Vector3(0, myScript.GridCellSize, 0);
                     var place = HandleUtility.WorldToGUIPoint(startPoint);
                     GUILayout.BeginArea(new Rect(place.x, place.y, 70, 350));
                     var rect = EditorGUILayout.BeginVertical();
@@ -92,43 +96,22 @@ namespace GridSystem.Editor
                   
                     int index = 0;
                     index = i * myScript.ColumnCount + j ;
+
+                    ChangeTextColorByCellType(index);
                    
-                    if (myScript.GridNodeList[index].gridType == GridNodeValue.GridType.Empty)
-                    {
-                        textStyle.normal.textColor = Color.yellow;
-                    }
-                    else
-                    {
-                        textStyle.normal.textColor = Color.red;
-                    }
                     GUILayout.BeginHorizontal();
                     GUILayout.FlexibleSpace();
                     
                     GUILayout.Label($"{i}x{j} Node", textStyle);
                     
-                    GUILayout.FlexibleSpace();
-                    GUILayout.EndHorizontal();
+                    ShowCellTypeEnum(index);
+
+                    ShowUpgradeTypeAndCount(index);
+
+                    ShowEnemyCount(index);
                     
-                    myScript.GridNodeList[index].gridType = 
-                        (GridNodeValue.GridType) EditorGUILayout.EnumPopup(myScript.GridNodeList[index].gridType);
-                    
-                    GUILayout.BeginHorizontal();
-                    GUILayout.FlexibleSpace();
-                    
-                    if (myScript.GridNodeList[index].gridType == GridNodeValue.GridType.Full)
-                    {
-                        textStyle.normal.textColor = Color.gray;
-                    }
-                    else
-                    {
-                        textStyle.normal.textColor = Color.white;
-                    }
-                    
-                    GUILayout.Label($"L: {myScript.GridNodeList[index].leftEmptyCount} " +
-                                    $"R: {myScript.GridNodeList[index].rightEmptyCount} {Environment.NewLine}" +
-                                    $"U: {myScript.GridNodeList[index].upEmptyCount} " +
-                                    $"D: {myScript.GridNodeList[index].downEmptyCount}", textStyle);
-                    
+                    ShowMovementValues(index);
+
                     GUILayout.FlexibleSpace();
                     GUILayout.EndHorizontal();
 
@@ -157,7 +140,97 @@ namespace GridSystem.Editor
 
            
         }
-        
+
+        private void ShowEnemyCount(int index)
+        {
+            if (myScript.GridNodeList[index].cellType == CellWithMoveValues.CellType.Enemy)
+            {
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+                myScript.GridNodeList[index].enemyCount = EditorGUILayout.IntField(myScript.GridNodeList[index].enemyCount);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+            }
+        }
+
+        private void ShowUpgradeTypeAndCount(int index)
+        {
+            if (myScript.GridNodeList[index].cellType == CellWithMoveValues.CellType.Increase)
+            {
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+                myScript.GridNodeList[index].upgradeType =
+                    (CellWithMoveValues.UpgradeType)EditorGUILayout.EnumPopup(myScript.GridNodeList[index].upgradeType);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+                myScript.GridNodeList[index].upgradeCount = EditorGUILayout.IntField(myScript.GridNodeList[index].upgradeCount);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+            }
+        }
+
+        private void ChangeTextColorByCellType(int index)
+        {
+            switch (myScript.GridNodeList[index].cellType)
+            {
+                case CellWithMoveValues.CellType.Empty:
+                    textStyle.normal.textColor = Color.yellow;
+                    break;
+                case CellWithMoveValues.CellType.Full:
+                    textStyle.normal.textColor = Color.magenta;
+                    break;
+                case CellWithMoveValues.CellType.Enemy:
+                    textStyle.normal.textColor = Color.red;
+                    break;
+                case CellWithMoveValues.CellType.Increase:
+                    textStyle.normal.textColor = Color.cyan;
+                    break;
+                case CellWithMoveValues.CellType.StartPoint:
+                    textStyle.normal.textColor = Color.green;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void ShowCellTypeEnum(int index)
+        {
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            myScript.GridNodeList[index].cellType =
+                (CellWithMoveValues.CellType)EditorGUILayout.EnumPopup(myScript.GridNodeList[index].cellType);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+        }
+
+        private void ShowMovementValues(int index)
+        {
+            if (myScript.GridNodeList[index].cellType == CellWithMoveValues.CellType.Full)
+            {
+                textStyle.normal.textColor = Color.gray;
+            }
+            else
+            {
+                textStyle.normal.textColor = Color.white;
+            }
+
+            GUILayout.Label($"L: {myScript.GridNodeList[index].leftEmptyCount} " +
+                            $"R: {myScript.GridNodeList[index].rightEmptyCount} {Environment.NewLine}" +
+                            $"U: {myScript.GridNodeList[index].upEmptyCount} " +
+                            $"D: {myScript.GridNodeList[index].downEmptyCount}", textStyle);
+        }
+
         private void SetEmptyValuesToZero(int i)
         {
             var activeNode = myScript.GridNodeList[i];
@@ -169,17 +242,16 @@ namespace GridSystem.Editor
 
         private void CalculateEmptyValues(int gridNodeIndex)
         {
-            if (myScript.GridNodeList[gridNodeIndex].gridType == GridNodeValue.GridType.Empty)
+            if(myScript.GridNodeList[gridNodeIndex].cellType == CellWithMoveValues.CellType.Full)
+            {
+                SetEmptyValuesToZero(gridNodeIndex);
+            }
+            else
             {
                 CalculateDownCount(gridNodeIndex);
                 CalculateUpCount(gridNodeIndex);
                 CalculateLeftCount(gridNodeIndex);
                 CalculateRightCount(gridNodeIndex);
-            }
-
-            else
-            {
-                SetEmptyValuesToZero(gridNodeIndex);
             }
         }
 
@@ -196,14 +268,11 @@ namespace GridSystem.Editor
                     var groundNode = myScript.GridNodeList.Find(gn =>
                         gn.row == myScript.GridNodeList[gridNodeIndex].row &&
                         gn.column == myScript.GridNodeList[gridNodeIndex].column - i);
-                    if (groundNode.gridType == GridNodeValue.GridType.Empty)
-                    {
-                        myScript.GridNodeList[gridNodeIndex].downEmptyCount += 1;
-                    }
-                    else
-                    {
+                    
+                    if(groundNode.cellType == CellWithMoveValues.CellType.Full)
                         break;
-                    }
+                    
+                    myScript.GridNodeList[gridNodeIndex].downEmptyCount += 1;
                 }
             }
         }
@@ -222,14 +291,11 @@ namespace GridSystem.Editor
                     var groundNode = myScript.GridNodeList.Find(gn =>
                         gn.row == myScript.GridNodeList[gridNodeIndex].row &&
                         gn.column == i);
-                    if (groundNode.gridType == GridNodeValue.GridType.Empty)
-                    {
-                        myScript.GridNodeList[gridNodeIndex].upEmptyCount += 1;
-                    }
-                    else
-                    {
+                    
+                    if(groundNode.cellType == CellWithMoveValues.CellType.Full)
                         break;
-                    }
+                    
+                    myScript.GridNodeList[gridNodeIndex].upEmptyCount += 1;
                 }
             }
         }
@@ -247,14 +313,11 @@ namespace GridSystem.Editor
                     var groundNode = myScript.GridNodeList.Find(gn =>
                         gn.column == myScript.GridNodeList[gridNodeIndex].column &&
                         gn.row == myScript.GridNodeList[gridNodeIndex].row - i);
-                    if (groundNode.gridType == GridNodeValue.GridType.Empty)
-                    {
-                        myScript.GridNodeList[gridNodeIndex].leftEmptyCount += 1;
-                    }
-                    else
-                    {
+                    
+                    if(groundNode.cellType == CellWithMoveValues.CellType.Full)
                         break;
-                    }
+
+                    myScript.GridNodeList[gridNodeIndex].leftEmptyCount += 1;
                 }
             }
         }
@@ -273,14 +336,11 @@ namespace GridSystem.Editor
                     var groundNode = myScript.GridNodeList.Find(gn =>
                         gn.column == myScript.GridNodeList[gridNodeIndex].column &&
                         gn.row == i);
-                    if (groundNode.gridType == GridNodeValue.GridType.Empty)
-                    {
-                        myScript.GridNodeList[gridNodeIndex].rightEmptyCount += 1;
-                    }
-                    else
-                    {
+                    
+                    if(groundNode.cellType == CellWithMoveValues.CellType.Full)
                         break;
-                    }
+                    
+                    myScript.GridNodeList[gridNodeIndex].rightEmptyCount += 1;
                 }
             }
         }
@@ -293,17 +353,17 @@ namespace GridSystem.Editor
             {
                 for (int j = 0; j < myScript.ColumnCount; j++)
                 {
-                    var startPointX = new Vector3(i, j, 0) * myScript.GridNodeSize + myScript.StartPoint;
-                    var endPointX = new Vector3(i + 1, j, 0) * myScript.GridNodeSize + myScript.StartPoint;
-                    var endPointY = new Vector3(i, j + 1, 0) * myScript.GridNodeSize + myScript.StartPoint;
+                    var startPointX = new Vector3(i, j, 0) * myScript.GridCellSize + myScript.StartPosition;
+                    var endPointX = new Vector3(i + 1, j, 0) * myScript.GridCellSize + myScript.StartPosition;
+                    var endPointY = new Vector3(i, j + 1, 0) * myScript.GridCellSize + myScript.StartPosition;
                     Handles.DrawLine(startPointX, endPointX);
                     Handles.DrawLine(startPointX, endPointY);
                     
                 }
             }
-            var lastXLinePosStart = new Vector3(0, myScript.ColumnCount, 0) * myScript.GridNodeSize + myScript.StartPoint;
-            var lastYLinePosStart = new Vector3(myScript.RowCount, 0, 0) * myScript.GridNodeSize + myScript.StartPoint;
-            var lastLinePosEnd = new Vector3(myScript.RowCount, myScript.ColumnCount, 0) * myScript.GridNodeSize + myScript.StartPoint;
+            var lastXLinePosStart = new Vector3(0, myScript.ColumnCount, 0) * myScript.GridCellSize + myScript.StartPosition;
+            var lastYLinePosStart = new Vector3(myScript.RowCount, 0, 0) * myScript.GridCellSize + myScript.StartPosition;
+            var lastLinePosEnd = new Vector3(myScript.RowCount, myScript.ColumnCount, 0) * myScript.GridCellSize + myScript.StartPosition;
             Handles.DrawLine(lastYLinePosStart, lastLinePosEnd);
             Handles.DrawLine(lastXLinePosStart, lastLinePosEnd);
             

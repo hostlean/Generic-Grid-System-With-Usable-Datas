@@ -5,9 +5,12 @@ using UnityEngine;
 namespace GridSystem.ScriptableObjects
 {
     [CreateAssetMenu(fileName = "Data", menuName = "Data/GridData", order = 0)]
-    public class GridData : ScriptableObject
+    public class GridWithMoveValuesData : ScriptableObject
     {
+        public int row;
+        public int column;
         public Vector3 startPosition;
-        public List<GridNodeValue> gridNodeValues = new List<GridNodeValue>();
+        public float gridCellSize;
+        public List<CellWithMoveValues> gridNodeValues = new List<CellWithMoveValues>();
     }
 }

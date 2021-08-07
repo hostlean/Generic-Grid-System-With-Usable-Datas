@@ -299,6 +299,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1168098148
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1168098149}
+  - component: {fileID: 1168098150}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1168098149
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168098148}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.9080591, y: 1.0000907, z: 39.034595}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1168098150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168098148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df98507277034e9d895e4a23d1b13e9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridWithMoveValuesData: {fileID: 0}
 --- !u!1 &1932117434
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,7 +354,7 @@ GameObject:
   - component: {fileID: 1932117436}
   - component: {fileID: 1932117435}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: GridLevelBuilder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -328,139 +372,286 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b653d12eb292f524cbd43510ec47d8fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPoint: {x: 0, y: 0, z: 0}
-  rowCount: 4
-  columnCount: 4
-  gridNodeSize: 10
+  startPosition: {x: 0, y: 0, z: 0}
+  rowCount: 5
+  columnCount: 5
+  gridCellSize: 1
   gridNodeList:
   - name: 0x0
     row: 0
     column: 0
-    gridType: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
     leftEmptyCount: 0
-    rightEmptyCount: 1
-    upEmptyCount: 3
+    rightEmptyCount: 4
+    upEmptyCount: 4
     downEmptyCount: 0
   - name: 0x1
     row: 0
     column: 1
-    gridType: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
     leftEmptyCount: 0
-    rightEmptyCount: 0
-    upEmptyCount: 2
+    rightEmptyCount: 4
+    upEmptyCount: 3
     downEmptyCount: 1
   - name: 0x2
     row: 0
     column: 2
-    gridType: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
     leftEmptyCount: 0
-    rightEmptyCount: 3
-    upEmptyCount: 1
+    rightEmptyCount: 2
+    upEmptyCount: 2
     downEmptyCount: 2
   - name: 0x3
     row: 0
     column: 3
-    gridType: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
     leftEmptyCount: 0
-    rightEmptyCount: 0
-    upEmptyCount: 0
+    rightEmptyCount: 4
+    upEmptyCount: 1
     downEmptyCount: 3
+  - name: 0x4
+    row: 0
+    column: 4
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 0
+    rightEmptyCount: 4
+    upEmptyCount: 0
+    downEmptyCount: 4
   - name: 1x0
     row: 1
     column: 0
-    gridType: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
     leftEmptyCount: 1
-    rightEmptyCount: 0
-    upEmptyCount: 0
+    rightEmptyCount: 3
+    upEmptyCount: 4
     downEmptyCount: 0
   - name: 1x1
     row: 1
     column: 1
-    gridType: 1
-    leftEmptyCount: 0
-    rightEmptyCount: 0
-    upEmptyCount: 0
-    downEmptyCount: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 1
+    rightEmptyCount: 3
+    upEmptyCount: 3
+    downEmptyCount: 1
   - name: 1x2
     row: 1
     column: 2
-    gridType: 0
+    cellType: 2
+    upgradeType: 0
+    enemyCount: 3
+    upgradeCount: 0
     leftEmptyCount: 1
-    rightEmptyCount: 2
-    upEmptyCount: 0
-    downEmptyCount: 0
+    rightEmptyCount: 1
+    upEmptyCount: 2
+    downEmptyCount: 2
   - name: 1x3
     row: 1
     column: 3
-    gridType: 1
-    leftEmptyCount: 0
-    rightEmptyCount: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 1
+    rightEmptyCount: 3
+    upEmptyCount: 1
+    downEmptyCount: 3
+  - name: 1x4
+    row: 1
+    column: 4
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 1
+    rightEmptyCount: 3
     upEmptyCount: 0
-    downEmptyCount: 0
+    downEmptyCount: 4
   - name: 2x0
     row: 2
     column: 0
-    gridType: 1
-    leftEmptyCount: 0
-    rightEmptyCount: 0
-    upEmptyCount: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 2
+    rightEmptyCount: 2
+    upEmptyCount: 4
     downEmptyCount: 0
   - name: 2x1
     row: 2
     column: 1
-    gridType: 1
-    leftEmptyCount: 0
-    rightEmptyCount: 0
-    upEmptyCount: 0
-    downEmptyCount: 0
+    cellType: 3
+    upgradeType: 1
+    enemyCount: 0
+    upgradeCount: 2
+    leftEmptyCount: 2
+    rightEmptyCount: 2
+    upEmptyCount: 3
+    downEmptyCount: 1
   - name: 2x2
     row: 2
     column: 2
-    gridType: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
     leftEmptyCount: 2
-    rightEmptyCount: 1
-    upEmptyCount: 1
-    downEmptyCount: 0
+    rightEmptyCount: 0
+    upEmptyCount: 2
+    downEmptyCount: 2
   - name: 2x3
     row: 2
     column: 3
-    gridType: 0
-    leftEmptyCount: 0
-    rightEmptyCount: 1
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 2
+    rightEmptyCount: 2
+    upEmptyCount: 1
+    downEmptyCount: 3
+  - name: 2x4
+    row: 2
+    column: 4
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 2
+    rightEmptyCount: 2
     upEmptyCount: 0
-    downEmptyCount: 1
+    downEmptyCount: 4
   - name: 3x0
     row: 3
     column: 0
-    gridType: 0
-    leftEmptyCount: 0
-    rightEmptyCount: 0
-    upEmptyCount: 3
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 3
+    rightEmptyCount: 1
+    upEmptyCount: 1
     downEmptyCount: 0
   - name: 3x1
     row: 3
     column: 1
-    gridType: 0
-    leftEmptyCount: 0
-    rightEmptyCount: 0
-    upEmptyCount: 2
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 3
+    rightEmptyCount: 1
+    upEmptyCount: 0
     downEmptyCount: 1
   - name: 3x2
     row: 3
     column: 2
-    gridType: 0
-    leftEmptyCount: 3
+    cellType: 1
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 0
     rightEmptyCount: 0
-    upEmptyCount: 1
-    downEmptyCount: 2
+    upEmptyCount: 0
+    downEmptyCount: 0
   - name: 3x3
     row: 3
     column: 3
-    gridType: 0
-    leftEmptyCount: 1
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 3
+    rightEmptyCount: 1
+    upEmptyCount: 1
+    downEmptyCount: 0
+  - name: 3x4
+    row: 3
+    column: 4
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 3
+    rightEmptyCount: 1
+    upEmptyCount: 0
+    downEmptyCount: 1
+  - name: 4x0
+    row: 4
+    column: 0
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 4
+    rightEmptyCount: 0
+    upEmptyCount: 4
+    downEmptyCount: 0
+  - name: 4x1
+    row: 4
+    column: 1
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 4
+    rightEmptyCount: 0
+    upEmptyCount: 3
+    downEmptyCount: 1
+  - name: 4x2
+    row: 4
+    column: 2
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 0
+    rightEmptyCount: 0
+    upEmptyCount: 2
+    downEmptyCount: 2
+  - name: 4x3
+    row: 4
+    column: 3
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 4
+    rightEmptyCount: 0
+    upEmptyCount: 1
+    downEmptyCount: 3
+  - name: 4x4
+    row: 4
+    column: 4
+    cellType: 0
+    upgradeType: 0
+    enemyCount: 0
+    upgradeCount: 0
+    leftEmptyCount: 4
     rightEmptyCount: 0
     upEmptyCount: 0
-    downEmptyCount: 3
+    downEmptyCount: 4
 --- !u!4 &1932117436
 Transform:
   m_ObjectHideFlags: 0
